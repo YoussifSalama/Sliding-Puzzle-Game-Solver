@@ -13,16 +13,22 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class PuzzleBoardGame extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 461470536640690001L;
+	
 	int boardSize;
+	PuzzleBoard board;
 	//JFrame gameFrame;
 	
 	public PuzzleBoardGame(int boardSize){
 		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
-
+		board = new PuzzleBoard(boardSize);
 		//titleGUI();
 		buttonsGUI();
 		
-		this.add(new PuzzleBoard(boardSize));
+		this.add(board);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(400,450);
@@ -41,7 +47,7 @@ public class PuzzleBoardGame extends JFrame {
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		
 
-		JButton button1 = new JButton("Button 1");
+		JButton button1 = new JButton("Button 1 ");
 		JButton button2 = new JButton("Button 2");
 		JButton button3 = new JButton("Button 3");
 		

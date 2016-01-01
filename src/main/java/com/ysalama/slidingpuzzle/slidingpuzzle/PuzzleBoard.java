@@ -130,6 +130,31 @@ public class PuzzleBoard extends JPanel{
 		return result;
 	}
 	
+	public ArrayList<Integer> toArrayList(){
+		
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		for(int y = 0; y<size; y++){
+			for(int x = 0; x<size; x++){
+				result.add(board[x][y].getTileNumber());
+			}
+		}
+		return result;
+	}
+	
+	public int numberOfMisplacedTiles(){
+		int numberOfMisplacedTiles = 0;
+		ArrayList<Integer> tileNumbersList = this.toArrayList();
+		for(int i = 0; i< tileNumbersList.size(); i++){
+			if(tileNumbersList.get(i) != i+1){
+				numberOfMisplacedTiles++;
+			} else if(tileNumbersList.get(i) == 0 && i != size-1 ){
+				numberOfMisplacedTiles++;
+			}
+		}
+		System.out.println(numberOfMisplacedTiles);
+
+		return numberOfMisplacedTiles;
+	}
 	
 	private boolean isSolvablePuzzle(ArrayList<Integer> tileNumbers){
 		
