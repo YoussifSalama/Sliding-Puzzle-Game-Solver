@@ -34,8 +34,15 @@ public class PuzzleBoard extends JPanel{
 		
 		//Shuffle the list.
 		Collections.shuffle(tileNumbersList);
+		System.out.println(tileNumbersList);
 		
-		//Creates new tiles with the shuffled tileNumbers array.
+		//If puzzle is not solvable, shuffle list until it is.
+		while(isSolvablePuzzle(tileNumbersList) == false){
+			Collections.shuffle(tileNumbersList);
+			System.out.println(tileNumbersList);
+		}
+		
+		//Creates new tiles with the shuffled tileNumbers list.
 		for(int y = 0; y<size; y++){
 			for(int x = 0; x<size; x++){
 				board[x][y] = new PuzzleTile(tileNumbersList.remove(0),x,y);
@@ -121,6 +128,28 @@ public class PuzzleBoard extends JPanel{
 			result = result + "\n";
 		}
 		return result;
+	}
+	
+	
+	private boolean isSolvablePuzzle(ArrayList<Integer> tileNumbers){
+		
+		/*If this copy is not done we will be removing from 
+		 * the actual ArrayList that is passed.*/
+		
+		ArrayList<Integer> tileNumbersCopy = new ArrayList<Integer>(tileNumbers);
+		tileNumbersCopy.remove(new Integer(0));
+		int numberOfInversions = 0;
+		
+		for(int i = 0; i<tileNumbersCopy.size(); i++){
+			for(int j = i+1; j<tileNumbersCopy.size(); j++){
+				if(tileNumbersCopy.get(i) > tileNumbersCopy.get(j)){
+					numberOfInversions++;
+				}
+			}
+		}
+		
+		//If the number of inversions is even then it is solvable.
+		return numberOfInversions % 2 == 0;
 	}
 	/**
 	 * Returns PuzzleTile in specified location, if location is 
@@ -225,5 +254,6 @@ public class PuzzleBoard extends JPanel{
 		
 		return isFirstSolution||isSecondSolution;
 	}
+	
 
 }
