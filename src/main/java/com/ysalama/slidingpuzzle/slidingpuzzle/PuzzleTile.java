@@ -19,7 +19,7 @@ public class PuzzleTile {
 	 *	sets Y coordinate
 	 */
 
-	public PuzzleTile(int tileNumber, int x, int y) {
+	public PuzzleTile(int tileNumber) {
 		this.setTileNumber(tileNumber);
 		//this.tilePosition = new Point(x,y);
 	}
