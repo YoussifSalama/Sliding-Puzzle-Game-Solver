@@ -21,7 +21,7 @@ public class PuzzleBoard {
 		//Creates new tiles with the shuffled tileNumbers array.
 		for(int x = 0; x<size; x++){
 			for(int y = 0; y<size; y++){
-				board[x][y] = new PuzzleTile(tileNumbersList.remove(0),x,y);
+				board[x][y] = new PuzzleTile(tileNumbersList.remove(0));
 			}
 		}
 		
