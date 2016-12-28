@@ -7,7 +7,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 public class PuzzleTile extends JPanel {
