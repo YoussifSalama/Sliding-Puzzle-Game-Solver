@@ -29,29 +29,26 @@ public class PuzzleTile extends JPanel {
 	public PuzzleTile(int tileNumber, int x, int y) {
 		this.setTileNumber(tileNumber);
 		this.setTilePosition(new Point(x,y));
-		//PuzzleTileGUI();
 	}
 	
 	protected void paintComponent(Graphics g) {
-	    // Let UI Delegate paint first, which 
-	    // includes background filling since 
-	    // this component is opaque.
-
+	
 	    super.paintComponent(g);    
 	    PuzzleTileGUI();
+	   
+	    //Sets Font And Color
 	    Font arial = new Font("Arial", Font.BOLD, 40);
 	    g.setFont(arial);
-	    
 	    g.setColor(Color.WHITE);
-	    
+	
+	    //Finds center of tile with the font used
 	    FontMetrics fontMetrics = g.getFontMetrics();
 	    int fontWidth = fontMetrics.stringWidth(""+getTileNumber());
 	    int fontHeight= fontMetrics.getHeight();
-	    
 	    int widthCenter = (this.getWidth()- fontWidth)/2;
 	    int heightCenter = (this.getHeight()+fontHeight)/2;
-	    //g.translate(x, y);
-	    //g.dra
+	    
+	    //Draws text on tile
 	    g.drawString(""+getTileNumber(),widthCenter,heightCenter);
 	   
 	}  
@@ -66,7 +63,8 @@ public class PuzzleTile extends JPanel {
 		
 		this.setBorder(BorderFactory.createLineBorder(Color.white));
 	}
-	
+	/**
+	 * Two tiles are equal if they have equal tileNumbers*/
 	public boolean equals(Object a){
 		
 		if(a == null){
@@ -106,12 +104,9 @@ public class PuzzleTile extends JPanel {
 		this.tilePosition = tilePosition;
 	}
 	
-	public void switchPositions(PuzzleTile a){
-		Point temp = this.tilePosition;
-		this.tilePosition = a.tilePosition;
-		a.tilePosition = temp;
-	}
-	
+	/**
+	 * Switches the tile number with the tile number of tile given in the 
+	 * argument.*/
 	public void switchNumber(PuzzleTile a){
 		int temp = this.tileNumber;
 		this.tileNumber = a.tileNumber;

@@ -47,6 +47,7 @@ public class PuzzleBoard{
 		
 		
 	}
+	
 	public void PuzzleBoardGUI(){
 		JFrame boardFrame = new JFrame();
 		
@@ -57,7 +58,6 @@ public class PuzzleBoard{
 			public void mouseClicked(MouseEvent e) {
 				PuzzleTile clickedTile = (PuzzleTile) e.getComponent();
 				move(clickedTile.getTilePosition().x, clickedTile.getTilePosition().y);
-				//clickedTile.setBackground(Color.GREEN);
 				
 				for(int y = 0; y<size; y++){
 					for(int x = 0; x<size; x++){
@@ -66,25 +66,10 @@ public class PuzzleBoard{
 				}
 			}
 
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void mousePressed(MouseEvent e) {return;}
+			public void mouseReleased(MouseEvent e) {return;}
+			public void mouseEntered(MouseEvent e) {return;}
+			public void mouseExited(MouseEvent e) {return;}
 			
 		};
 		
@@ -96,9 +81,7 @@ public class PuzzleBoard{
 
 			}
 		}
-		
-	
-		
+
 		boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		boardFrame.setSize(400,400);
 		boardFrame.setVisible(true);
@@ -173,7 +156,6 @@ public class PuzzleBoard{
 	
 	//If possible switch specified tile with zero tile.
 	public void move(int x, int y){
-		PuzzleTile tileToMove = getPuzzleTile(x,y);
 
 		int movement = canTileMove(x, y);
 		if(movement == UNMOVABLE){
@@ -182,24 +164,16 @@ public class PuzzleBoard{
 		
 		if(movement == ABOVE){
 			board[x][y].switchNumber(board[x][y+1]);
-			
-			//board[x][y] = board[x][y+1];
-			//board[x][y+1] = tileToMove;
+
 		} else if(movement == BELOW){
 			board[x][y].switchNumber(board[x][y-1]);
 			
-			//board[x][y] = board[x][y-1];
-			//board[x][y-1] = tileToMove;
 		} else if(movement == LEFT){
 			board[x][y].switchNumber(board[x-1][y]);
-			
-			//board[x][y] = board[x-1][y];
-			//board[x-1][y] = tileToMove;
+
 		} else if(movement == RIGHT){
 			board[x][y].switchNumber(board[x+1][y]);
-			
-			//board[x][y] = board[x+1][y];
-			//board[x+1][y] = tileToMove;
+
 		}
 	}
 
