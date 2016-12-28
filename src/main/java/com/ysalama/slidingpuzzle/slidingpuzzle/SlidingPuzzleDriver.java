@@ -4,9 +4,8 @@ package com.ysalama.slidingpuzzle.slidingpuzzle;
 public class SlidingPuzzleDriver {
 	
 	public static void main(String[] args) {
-		
-		new PuzzleBoard(3);
-		
+		PuzzleBoard b = new PuzzleBoard(3);
+		b.isCorrectSolution();
 	}
 	
 }

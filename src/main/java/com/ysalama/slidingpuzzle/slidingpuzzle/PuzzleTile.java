@@ -26,14 +26,69 @@ public class PuzzleTile extends JPanel {
 	 */
 
 	public PuzzleTile(int tileNumber, int x, int y) {
-		this.setTileNumber(tileNumber);
-		this.setTilePosition(new Point(x,y));
+		this.tileNumber = tileNumber;
+		this.tilePosition = new Point(x,y);
 	}
 	
-	protected void paintComponent(Graphics g) {
 	
+	/**
+	 * Two tiles are equal if they have equal tileNumbers
+	 * 
+	 * */
+	public boolean equals(Object a){
+		
+		if(a == null){
+			return false;
+		}
+		if( !(a instanceof PuzzleTile) ){
+			return false;
+		}
+		
+		PuzzleTile aTile = (PuzzleTile) a;
+		return aTile.getTileNumber() == this.getTileNumber();
+		
+	}
+	
+	/**
+	 * Switches the tile number with the tile number of tile given in the 
+	 * argument.
+	 * 
+	 * */
+	public void switchNumber(PuzzleTile a){
+		int temp = this.tileNumber;
+		this.tileNumber = a.tileNumber;
+		a.tileNumber = temp;
+	}
+	
+	public boolean isEmpty(){
+		return getTileNumber() == 0;
+	}
+
+	public int getTileNumber() {
+		return tileNumber;
+	}
+	
+	public String toString(){
+		return "" + getTileNumber();
+	}
+
+	public Point getTilePosition() {
+		return tilePosition;
+	}
+	
+	//The following method deals with the tiles GUI.
+	protected void paintComponent(Graphics g) {
 	    super.paintComponent(g);    
-	    PuzzleTileGUI();
+	    
+	    
+		if(this.isEmpty()){ //If the tile is empty, color it white...
+			this.setBackground(Color.WHITE);
+		} else{ 			//Else color the tile black
+			this.setBackground(Color.BLACK);
+		}
+		
+		//Draws a white border around each tile.
+		this.setBorder(BorderFactory.createLineBorder(Color.white));
 	   
 	    //Sets Font And Color
 	    Font arial = new Font("Arial", Font.BOLD, 40);
@@ -51,65 +106,5 @@ public class PuzzleTile extends JPanel {
 	    g.drawString(""+getTileNumber(),widthCenter,heightCenter);
 	   
 	}  
-	
-	
-	private void PuzzleTileGUI(){
-		if(getTileNumber() == 0){
-			this.setBackground(Color.WHITE);
-		} else{
-			this.setBackground(Color.BLACK);
-		}
-		
-		this.setBorder(BorderFactory.createLineBorder(Color.white));
-	}
-	/**
-	 * Two tiles are equal if they have equal tileNumbers*/
-	public boolean equals(Object a){
-		
-		if(a == null){
-			return false;
-		}
-		if( !(a instanceof PuzzleTile) ){
-			return false;
-		}
-		
-		PuzzleTile aTile = (PuzzleTile) a;
-		return aTile.getTileNumber() == this.getTileNumber();
-		
-	}
-	
-	public boolean isEmpty(){
-		return getTileNumber() == 0;
-	}
-
-	public int getTileNumber() {
-		return tileNumber;
-	}
-
-
-	public void setTileNumber(int tileNumber) {
-		this.tileNumber = tileNumber;
-	}
-	
-	public String toString(){
-		return "" + getTileNumber();
-	}
-
-	public Point getTilePosition() {
-		return tilePosition;
-	}
-
-	public void setTilePosition(Point tilePosition) {
-		this.tilePosition = tilePosition;
-	}
-	
-	/**
-	 * Switches the tile number with the tile number of tile given in the 
-	 * argument.*/
-	public void switchNumber(PuzzleTile a){
-		int temp = this.tileNumber;
-		this.tileNumber = a.tileNumber;
-		a.tileNumber = temp;
-	}
 
 }

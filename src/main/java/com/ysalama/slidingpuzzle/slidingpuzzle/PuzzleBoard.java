@@ -55,8 +55,13 @@ public class PuzzleBoard{
 
 			public void mouseClicked(MouseEvent e) {
 				PuzzleTile clickedTile = (PuzzleTile) e.getComponent();
-				move(clickedTile.getTilePosition().x, clickedTile.getTilePosition().y);
 				
+				int xPositionOfClickedTile = clickedTile.getTilePosition().x;
+				int yPositionOfClickedTile = clickedTile.getTilePosition().y;
+				
+				move(xPositionOfClickedTile, yPositionOfClickedTile);
+				
+				//Repaints the whole board, to display all changes.
 				for(int y = 0; y<size; y++){
 					for(int x = 0; x<size; x++){
 						board[x][y].repaint();
@@ -173,6 +178,51 @@ public class PuzzleBoard{
 			board[x][y].switchNumber(board[x+1][y]);
 
 		}
+	}
+	
+	/**
+	 * 
+	 * This method checks if a correct solution has been reached.
+	 * There are two possible correct solutions:
+	 * 	1) If the empty tile is in the upper left corner
+	 * 	2) If the empty tile is in the bottom right corner
+	 * 
+	 * */
+	public boolean isCorrectSolution(){
+
+		String firstSolution = ""; // Empty tile in upper left corner.
+		
+		
+		int tileNumber = 0;
+		for(int y = 0; y<size; y++){
+			for(int x = 0; x<size; x++){
+				firstSolution = firstSolution + tileNumber++ + "\t";
+			}
+			firstSolution = firstSolution + "\n";
+		}
+		
+		
+		String secondSolution = ""; // Empty tile in bottom right corner.
+		
+		tileNumber = 1;
+		for(int y = 0; y<size; y++){
+			for(int x = 0; x<size; x++){
+				
+				if(x == size-1 && y == size-1){
+					tileNumber = 0;
+				}
+				secondSolution = secondSolution + tileNumber++ + "\t";
+			}
+			secondSolution = secondSolution + "\n";
+		}
+
+		System.out.println(firstSolution);
+		System.out.println(secondSolution);
+		
+		boolean isFirstSolution = this.toString().equals(firstSolution);
+		boolean isSecondSolution = this.toString().equals(secondSolution);
+		
+		return isFirstSolution||isSecondSolution;
 	}
 
 }
