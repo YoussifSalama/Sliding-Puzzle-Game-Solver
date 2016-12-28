@@ -2,6 +2,7 @@ package com.ysalama.slidingpuzzle.slidingpuzzle;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 
@@ -42,8 +43,16 @@ public class PuzzleTile extends JPanel {
 	    g.setFont(arial);
 	    
 	    g.setColor(Color.WHITE);
-	   // g.translate(x, y);
-	    g.drawString(""+this.getTileNumber(),10,20);
+	    
+	    FontMetrics fontMetrics = g.getFontMetrics();
+	    int fontWidth = fontMetrics.stringWidth(""+getTileNumber());
+	    int fontHeight= fontMetrics.getHeight();
+	    
+	    int widthCenter = (this.getWidth()- fontWidth)/2;
+	    int heightCenter = (this.getHeight()+fontHeight)/2;
+	    //g.translate(x, y);
+	    //g.dra
+	    g.drawString(""+getTileNumber(),widthCenter,heightCenter);
 	   
 	}  
 	
