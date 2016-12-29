@@ -31,7 +31,7 @@ public class PuzzleBoardGame extends JFrame {
 	
 	private void titleGUI(){
 		JLabel title = new JLabel("Sliding Puzzle Game");
-		//title.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		this.add(title);
 	}
@@ -39,20 +39,16 @@ public class PuzzleBoardGame extends JFrame {
 	private void buttonsGUI(){
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-		//buttonPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		//buttonPanel.setSize(5, 5);
+		
+
 		JButton button1 = new JButton("Button 1");
-		button1.setSize(20, 5);
 		JButton button2 = new JButton("Button 2");
-		button2.setSize(20, 5);
 		JButton button3 = new JButton("Button 3");
-		button3.setSize(20, 5);
 		
 		buttonPanel.add(button1);
 		buttonPanel.add(button2);
 		buttonPanel.add(button3);
 		
 		this.add(buttonPanel);
-		//buttonPanel.add(title);
 	}
 }
