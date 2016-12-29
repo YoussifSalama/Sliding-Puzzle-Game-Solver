@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-public class PuzzleBoard{
+public class PuzzleBoard extends JPanel{
 	final static int ABOVE = 1;
 	final static int BELOW = 2;
 	final static int LEFT = 3;
@@ -47,9 +48,9 @@ public class PuzzleBoard{
 	}
 	
 	public void PuzzleBoardGUI(){
-		JFrame boardFrame = new JFrame();
+		//JFrame this = new JFrame();
 		
-		boardFrame.setLayout(new GridLayout(size,size));
+		this.setLayout(new GridLayout(size,size));
 		
 		MouseListener mouseListener = new MouseListener(){
 
@@ -80,14 +81,14 @@ public class PuzzleBoard{
 			for(int x = 0; x<size; x++){
 				board[x][y].addMouseListener(mouseListener);
 
-				boardFrame.add(board[x][y]);
+				this.add(board[x][y]);
 
 			}
 		}
 
-		boardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		boardFrame.setSize(400,400);
-		boardFrame.setVisible(true);
+		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//this.setSize(400,400);
+		//this.setVisible(true);
 		
 	}
 	//CONSTRUCTOR FOR TESTING: Arraylist is not shuffled.
