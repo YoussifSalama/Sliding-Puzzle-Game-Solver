@@ -254,6 +254,12 @@ public class PuzzleBoard extends JPanel{
 		return isFirstSolution||isSecondSolution;
 	}
 	
+	/**
+	 * Returns an ArrayList with all the possible board states
+	 *  that can occur after moving a tile on this board.
+	 *  
+	 * */
+	
 	public ArrayList<PuzzleBoard> getNextPossibleBoards(){
 		ArrayList<PuzzleBoard> possibleBoards = new ArrayList<PuzzleBoard>();
 		for(int y = 0; y<size; y++){
