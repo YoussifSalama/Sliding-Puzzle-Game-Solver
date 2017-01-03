@@ -24,7 +24,7 @@ public class PuzzleBoard extends JPanel{
 		
 		
 		this.size = size;
-		board = new PuzzleTile[size][size];
+		this.board = new PuzzleTile[size][size];
 		
 		ArrayList<Integer> tileNumbersList = new ArrayList<Integer>();
 		//Add numbers from 0 to size*size - 1.
@@ -54,50 +54,18 @@ public class PuzzleBoard extends JPanel{
 		
 	}
 	
-	public void PuzzleBoardGUI(){
-		//JFrame this = new JFrame();
-		
-		this.setLayout(new GridLayout(size,size));
-		
-		MouseListener mouseListener = new MouseListener(){
-
-			public void mouseClicked(MouseEvent e) {
-				PuzzleTile clickedTile = (PuzzleTile) e.getComponent();
-				
-				int xPositionOfClickedTile = clickedTile.getTilePosition().x;
-				int yPositionOfClickedTile = clickedTile.getTilePosition().y;
-				
-				move(xPositionOfClickedTile, yPositionOfClickedTile);
-				
-				//Repaints the whole board, to display all changes.
-				for(int y = 0; y<size; y++){
-					for(int x = 0; x<size; x++){
-						board[x][y].repaint();
-					}
-				}
-			}
-
-			public void mousePressed(MouseEvent e) {return;}
-			public void mouseReleased(MouseEvent e) {return;}
-			public void mouseEntered(MouseEvent e) {return;}
-			public void mouseExited(MouseEvent e) {return;}
-			
-		};
-		
+	public PuzzleBoard(PuzzleBoard that){
+		this.board = new PuzzleTile[size][size];
+		//Copy each puzzleTile from that to this.
 		for(int y = 0; y<size; y++){
 			for(int x = 0; x<size; x++){
-				board[x][y].addMouseListener(mouseListener);
-
-				this.add(board[x][y]);
-
+				this.board[x][y] = new PuzzleTile(that.board[x][y]);
 			}
 		}
-
-		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//this.setSize(400,400);
-		//this.setVisible(true);
-		
+		this.size = that.size;
 	}
+	
+
 	//CONSTRUCTOR FOR TESTING: Arraylist is not shuffled.
 	public PuzzleBoard(int size, boolean a){
 		this.size = size;
@@ -130,7 +98,7 @@ public class PuzzleBoard extends JPanel{
 		return result;
 	}
 	
-	public ArrayList<Integer> toArrayList(){
+	private ArrayList<Integer> toArrayList(){
 		
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		for(int y = 0; y<size; y++){
@@ -140,7 +108,9 @@ public class PuzzleBoard extends JPanel{
 		}
 		return result;
 	}
-	
+	/**
+	 * Returns the number of tiles in the board that are out of place.
+	 * */
 	public int numberOfMisplacedTiles(){
 		int numberOfMisplacedTiles = 0;
 		ArrayList<Integer> tileNumbersList = this.toArrayList();
@@ -186,7 +156,9 @@ public class PuzzleBoard extends JPanel{
 		return board[x][y];
 	}
 	
-	//A tile can move if one of the tiles around it is the 0 tile.
+	/**
+	 * A tile can move if one of the tiles around it is the 0 tile.
+	 * */
 	private int canTileMove(int x, int y){
 		PuzzleTile emptyTile = new PuzzleTile(0,0,0);
 		
@@ -212,7 +184,9 @@ public class PuzzleBoard extends JPanel{
 		return UNMOVABLE;
 	}
 	
-	//If possible switch specified tile with zero tile.
+	/**
+	 * If possible switches specified tile with the empty tile.
+	 * */
 	public void move(int x, int y){
 
 		int movement = canTileMove(x, y);
@@ -280,5 +254,63 @@ public class PuzzleBoard extends JPanel{
 		return isFirstSolution||isSecondSolution;
 	}
 	
+	public ArrayList<PuzzleBoard> getNextPossibleBoards(){
+		ArrayList<PuzzleBoard> possibleBoards = new ArrayList<PuzzleBoard>();
+		for(int y = 0; y<size; y++){
+			for(int x = 0; x<size; x++){
+				if(this.canTileMove(x, y) != UNMOVABLE){
+					PuzzleBoard aPossibleBoard = new PuzzleBoard(this);
+					aPossibleBoard.move(x, y);
+					possibleBoards.add(aPossibleBoard);
+				}
+			}
+		}
+		return possibleBoards;
+	}
+	
+	private void PuzzleBoardGUI(){
+		//JFrame this = new JFrame();
+		
+		this.setLayout(new GridLayout(size,size));
+		
+		MouseListener mouseListener = new MouseListener(){
+
+			public void mouseClicked(MouseEvent e) {
+				PuzzleTile clickedTile = (PuzzleTile) e.getComponent();
+				
+				int xPositionOfClickedTile = clickedTile.getTilePosition().x;
+				int yPositionOfClickedTile = clickedTile.getTilePosition().y;
+				
+				move(xPositionOfClickedTile, yPositionOfClickedTile);
+				
+				//Repaints the whole board, to display all changes.
+				for(int y = 0; y<size; y++){
+					for(int x = 0; x<size; x++){
+						board[x][y].repaint();
+					}
+				}
+			}
+
+			public void mousePressed(MouseEvent e) {return;}
+			public void mouseReleased(MouseEvent e) {return;}
+			public void mouseEntered(MouseEvent e) {return;}
+			public void mouseExited(MouseEvent e) {return;}
+			
+		};
+		
+		for(int y = 0; y<size; y++){
+			for(int x = 0; x<size; x++){
+				board[x][y].addMouseListener(mouseListener);
+
+				this.add(board[x][y]);
+
+			}
+		}
+
+		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//this.setSize(400,400);
+		//this.setVisible(true);
+		
+	}
 
 }

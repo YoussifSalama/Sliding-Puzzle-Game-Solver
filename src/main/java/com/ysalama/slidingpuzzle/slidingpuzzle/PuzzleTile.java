@@ -30,6 +30,11 @@ public class PuzzleTile extends JPanel {
 		this.tilePosition = new Point(x,y);
 	}
 	
+	public PuzzleTile(PuzzleTile that){
+		this.tileNumber = that.getTileNumber();
+		this.tilePosition = new Point(that.getTilePosition());
+	}
+	
 	
 	/**
 	 * Two tiles are equal if they have equal tileNumbers
