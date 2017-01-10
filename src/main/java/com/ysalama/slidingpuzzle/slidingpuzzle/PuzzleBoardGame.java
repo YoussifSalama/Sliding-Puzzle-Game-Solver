@@ -3,6 +3,11 @@ package com.ysalama.slidingpuzzle.slidingpuzzle;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.PriorityQueue;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -25,7 +30,7 @@ public class PuzzleBoardGame extends JFrame {
 	public PuzzleBoardGame(int boardSize){
 		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
 		board = new PuzzleBoard(boardSize);
-		//titleGUI();
+
 		buttonsGUI();
 		
 		this.add(board);
@@ -35,25 +40,49 @@ public class PuzzleBoardGame extends JFrame {
 		this.setVisible(true);
 	}
 	
-	private void titleGUI(){
-		JLabel title = new JLabel("Sliding Puzzle Game");
+	public PuzzleBoardGame(PuzzleBoard board){
+		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.PAGE_AXIS));
+		this.board = board;
 
-		title.setHorizontalAlignment(SwingConstants.CENTER);
-		this.add(title);
+		buttonsGUI();
+		
+		this.add(this.board);
+		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(400,450);
+		this.setVisible(true);
 	}
+	
+	public void solve(){
+		board.solve();
+	}
+	
 	
 	private void buttonsGUI(){
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		
 
-		JButton button1 = new JButton("Button 1 ");
+		JButton button1 = new JButton("Solve!");
 		JButton button2 = new JButton("Button 2");
 		JButton button3 = new JButton("Button 3");
 		
+		button1.addMouseListener(new MouseListener(){
+
+			public void mouseClicked(MouseEvent e) {
+				solve();
+				
+			}
+
+			public void mousePressed(MouseEvent e) {return;}
+			public void mouseReleased(MouseEvent e) {return;}
+			public void mouseEntered(MouseEvent e) {return;}
+			public void mouseExited(MouseEvent e) {return;}
+		});
+		
 		buttonPanel.add(button1);
-		buttonPanel.add(button2);
-		buttonPanel.add(button3);
+		//buttonPanel.add(button2);
+		//buttonPanel.add(button3);
 		
 		this.add(buttonPanel);
 	}

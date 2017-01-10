@@ -5,11 +5,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.PriorityQueue;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class PuzzleBoard extends JPanel{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1680191577932990786L;
+	
 	final static int ABOVE = 1;
 	final static int BELOW = 2;
 	final static int LEFT = 3;
@@ -48,43 +54,46 @@ public class PuzzleBoard extends JPanel{
 				board[x][y] = new PuzzleTile(tileNumbersList.remove(0),x,y);
 			}
 		}
-		
+		System.out.println(this.toString());
 		PuzzleBoardGUI();
 		
 		
 	}
 	
-	public PuzzleBoard(PuzzleBoard that){
+	public PuzzleBoard(int size, ArrayList<Integer> tileNumbersList){
+		this.size = size;
 		this.board = new PuzzleTile[size][size];
+		
+		System.out.println(tileNumbersList);
+		
+		//If puzzle is not solvable, shuffle list until it is.
+		while(isSolvablePuzzle(tileNumbersList) == false){
+			Collections.shuffle(tileNumbersList);
+			System.out.println(tileNumbersList);
+		}
+		
+		//Creates new tiles with the shuffled tileNumbers list.
+		for(int y = 0; y<size; y++){
+			for(int x = 0; x<size; x++){
+				board[x][y] = new PuzzleTile(tileNumbersList.remove(0),x,y);
+			}
+		}
+		System.out.println(this.toString());
+		PuzzleBoardGUI();
+	}
+	
+	public PuzzleBoard(PuzzleBoard that){
+		this.size = that.size;
+		this.board = new PuzzleTile[size][size];
+		
 		//Copy each puzzleTile from that to this.
 		for(int y = 0; y<size; y++){
 			for(int x = 0; x<size; x++){
 				this.board[x][y] = new PuzzleTile(that.board[x][y]);
 			}
 		}
-		this.size = that.size;
 	}
 	
-
-	//CONSTRUCTOR FOR TESTING: Arraylist is not shuffled.
-	public PuzzleBoard(int size, boolean a){
-		this.size = size;
-		board = new PuzzleTile[size][size];
-		
-		ArrayList<Integer> tileNumbersList = new ArrayList<Integer>();
-		//Add numbers from 0 to size*size - 1.
-		for(int i = 0; i< size*size; i++){
-			tileNumbersList.add(i);
-		}
-		
-		//Creates new tiles with the shuffled tileNumbers array.
-		for(int y = 0; y<size; y++){
-			for(int x = 0; x<size; x++){
-				board[x][y] = new PuzzleTile(tileNumbersList.remove(0),x,y);
-			}
-		}
-		
-	}
 	
 	public String toString(){
 		
@@ -98,6 +107,23 @@ public class PuzzleBoard extends JPanel{
 		return result;
 	}
 	
+	public boolean equals(PuzzleBoard that){
+		for(int y = 0; y<size; y++){
+			for(int x = 0; x<size; x++){
+				if(this.board[x][y].equals(that.board[x][y]) == false){
+					return false;
+				}
+			}
+		}
+		return true;
+		
+	}
+	
+	/**
+	 * Returns the tiles on the board in the form of an array list.
+	 * 
+	 * */
+	
 	private ArrayList<Integer> toArrayList(){
 		
 		ArrayList<Integer> result = new ArrayList<Integer>();
@@ -108,9 +134,12 @@ public class PuzzleBoard extends JPanel{
 		}
 		return result;
 	}
+	
 	/**
 	 * Returns the number of tiles in the board that are out of place.
+	 * 
 	 * */
+	
 	public int numberOfMisplacedTiles(){
 		int numberOfMisplacedTiles = 0;
 		ArrayList<Integer> tileNumbersList = this.toArrayList();
@@ -121,9 +150,25 @@ public class PuzzleBoard extends JPanel{
 				numberOfMisplacedTiles++;
 			}
 		}
-		System.out.println(numberOfMisplacedTiles);
+		//System.out.println(numberOfMisplacedTiles);
 
 		return numberOfMisplacedTiles;
+	}
+	
+	/**
+	 * Returns the sum of the Manhattan distances in the board.
+	 * 
+	 * */
+	
+	public int getManhattenDistance(){
+		int manhattenDistance = 0;
+		int index = 0;
+		for(int y = 0; y<size; y++){
+			for(int x = 0; x<size; x++){
+				manhattenDistance += board[x][y].getManhattanDistance(index++);
+			}
+		}
+		return manhattenDistance;
 	}
 	
 	private boolean isSolvablePuzzle(ArrayList<Integer> tileNumbers){
@@ -199,14 +244,15 @@ public class PuzzleBoard extends JPanel{
 
 		} else if(movement == BELOW){
 			board[x][y].switchNumber(board[x][y-1]);
-			
+
 		} else if(movement == LEFT){
 			board[x][y].switchNumber(board[x-1][y]);
-
+	
 		} else if(movement == RIGHT){
 			board[x][y].switchNumber(board[x+1][y]);
 
 		}
+		
 	}
 	
 	/**
@@ -219,7 +265,7 @@ public class PuzzleBoard extends JPanel{
 	 * */
 	public boolean isCorrectSolution(){
 
-		String firstSolution = ""; // Empty tile in upper left corner.
+		/*String firstSolution = ""; // Empty tile in upper left corner.
 		
 		
 		int tileNumber = 0;
@@ -228,30 +274,30 @@ public class PuzzleBoard extends JPanel{
 				firstSolution = firstSolution + tileNumber++ + "\t";
 			}
 			firstSolution = firstSolution + "\n";
-		}
+		}*/
 		
 		
-		String secondSolution = ""; // Empty tile in bottom right corner.
+		String solution = ""; // Empty tile in bottom right corner.
 		
-		tileNumber = 1;
+		int tileNumber = 1;
 		for(int y = 0; y<size; y++){
 			for(int x = 0; x<size; x++){
 				
 				if(x == size-1 && y == size-1){
 					tileNumber = 0;
 				}
-				secondSolution = secondSolution + tileNumber++ + "\t";
+				solution = solution + tileNumber++ + "\t";
 			}
-			secondSolution = secondSolution + "\n";
+			solution = solution + "\n";
 		}
 
-		System.out.println(firstSolution);
-		System.out.println(secondSolution);
+		//System.out.println(firstSolution);
+		//System.out.println(solution);
 		
-		boolean isFirstSolution = this.toString().equals(firstSolution);
-		boolean isSecondSolution = this.toString().equals(secondSolution);
-		
-		return isFirstSolution||isSecondSolution;
+		//boolean isFirstSolution = this.toString().equals(firstSolution);
+		boolean isSolution = this.toString().equals(solution);
+		return isSolution;
+		//return isFirstSolution||isSecondSolution;
 	}
 	
 	/**
@@ -289,12 +335,14 @@ public class PuzzleBoard extends JPanel{
 				
 				move(xPositionOfClickedTile, yPositionOfClickedTile);
 				
-				//Repaints the whole board, to display all changes.
-				for(int y = 0; y<size; y++){
-					for(int x = 0; x<size; x++){
+
+				/*//Repaints the whole board, to display all changes.
+				for( y = 0; y<size; y++){
+					for( x = 0; x<size; x++){
 						board[x][y].repaint();
 					}
-				}
+				}*/
+				
 			}
 
 			public void mousePressed(MouseEvent e) {return;}
@@ -318,5 +366,51 @@ public class PuzzleBoard extends JPanel{
 		//this.setVisible(true);
 		
 	}
-
+	
+	public void solve(){
+		PriorityQueue <BoardNode> queue = new PriorityQueue<BoardNode>();
+		HashSet <BoardNode> visitedSet = new HashSet<BoardNode>();
+		
+		BoardNode startNode = new BoardNode(this);
+		queue.add(startNode);
+		
+		while(queue.isEmpty() == false){
+			BoardNode current = queue.poll();
+			visitedSet.add(current);
+			//System.out.println(current.getState());
+			
+			//this.board = current.state.board; //So puzzleTiles canMove
+			
+			
+			if(current.state.isCorrectSolution()){
+				//DO STUFF
+				System.out.println("DONE \n");
+				System.out.println(current);
+				
+				return;
+			}
+			
+			ArrayList<BoardNode> nextPossibleNodes = current.getNextPossibleNodes();
+			for(BoardNode x: nextPossibleNodes){
+				if(!visitedSet.contains(x)  && !queue.contains(x)){
+					//System.out.println(x.getState());
+					queue.add(x);
+				} 
+			}
+			
+		}
+		
+	}
+	
+	public long puzzleBoardToLong(){
+		
+		String result = "";
+		for(int y = 0; y<size; y++){
+			for(int x = 0; x<size; x++){
+				result = result + board[x][y].getTileNumber();
+			}
+		}
+		return new Long(result);
+	}
+	
 }
