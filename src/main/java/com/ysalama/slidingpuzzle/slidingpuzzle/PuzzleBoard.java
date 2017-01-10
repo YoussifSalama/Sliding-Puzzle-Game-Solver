@@ -412,5 +412,6 @@ public class PuzzleBoard extends JPanel{
 		}
 		return new Long(result);
 	}
+
 	
 }
