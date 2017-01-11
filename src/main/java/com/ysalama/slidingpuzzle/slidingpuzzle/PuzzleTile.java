@@ -81,16 +81,9 @@ public class PuzzleTile extends JPanel {
 		return tilePosition;
 	}
 	
-	private Point getGoalTilePosition(){
-		
-		int goalXPosition = (tileNumber-1)/3;
-		int goalYPosition = (tileNumber-1)%3;
-		
-		return new Point(goalXPosition,goalYPosition);
-	}
-	
 	public int getManhattanDistance(int index) {
-		return Math.abs((index / 3) - ((tileNumber-1) / 3)) + Math.abs((index % 3) - ((tileNumber-1) % 3));
+		return Math.abs((index / 3) - ((tileNumber-1) / 3)) 
+				+ Math.abs((index % 3) - ((tileNumber-1) % 3));
 	}
 	
 	//The following method deals with the tiles GUI.

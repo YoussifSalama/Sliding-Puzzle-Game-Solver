@@ -1,22 +1,31 @@
 package com.ysalama.slidingpuzzle.slidingpuzzle;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class BoardNode implements Comparable<BoardNode>{
-	PuzzleBoard state;
-	PuzzleBoard previousState;
+	long state;
+	BoardNode previousNode;
 	private int numberOfMoves;
 	
 	public BoardNode(PuzzleBoard state){
-		this.state = state;
-		previousState = null;
+		this.state = state.puzzleBoardToLong();
+		previousNode = null;
 		
 		numberOfMoves = 0;
 	}
 	
 	public BoardNode(PuzzleBoard state, BoardNode previousNode){
+		this.state = state.puzzleBoardToLong();
+		this.previousNode = previousNode;
+		
+		numberOfMoves = previousNode.numberOfMoves + 1;
+	}
+	
+	public BoardNode(long state, BoardNode previousNode){
 		this.state = state;
-		this.previousState = previousNode.state;
+		this.previousNode = previousNode;
 		
 		numberOfMoves = previousNode.numberOfMoves + 1;
 	}
@@ -24,7 +33,7 @@ public class BoardNode implements Comparable<BoardNode>{
 	private int getHeuristic(){
 		int costFromStartToNode = numberOfMoves;
 		//int costFromNodeToGoal = state.numberOfMisplacedTiles();
-		int costFromNodeToGoal = state.getManhattenDistance();
+		int costFromNodeToGoal = getState().getManhattenDistance();
 		int totalCost = costFromStartToNode + costFromNodeToGoal;
 		return totalCost;
 	}
@@ -38,7 +47,7 @@ public class BoardNode implements Comparable<BoardNode>{
 	}
 	
 	public ArrayList<BoardNode> getNextPossibleNodes(){
-		ArrayList<PuzzleBoard> nextPossibleStates = state.getNextPossibleBoards();
+		ArrayList<PuzzleBoard> nextPossibleStates = getState().getNextPossibleBoards();
 		ArrayList<BoardNode> nextPossibleNodes = new ArrayList<BoardNode>();
 		
 		for(PuzzleBoard x: nextPossibleStates){
@@ -48,17 +57,30 @@ public class BoardNode implements Comparable<BoardNode>{
 	}
 	
 	public PuzzleBoard getState(){
-		return this.state;
+		return new PuzzleBoard(Long.toString(state));
 	}
 	
 	public boolean equals(BoardNode that){
-		return this.state.equals(that.state);
+		return this == that;
 	}
 	
 	public String toString(){
 		String result;
-		result = state + "\n" + "Number of Moves: " + numberOfMoves+"\n\n";
+		PuzzleBoard puzzleState = new PuzzleBoard(Long.toString(this.state));
+		result = puzzleState + "\n" + "Number of Moves: " + numberOfMoves+"\n\n";
 		return result;
+	}
+	
+	public ArrayDeque<BoardNode> getPath(){
+		ArrayDeque<BoardNode> path  = new ArrayDeque<BoardNode>();
+		BoardNode current = this;
+		//path.add(current);
+		while(current != null){
+			path.push(current);
+			current = current.previousNode;
+		}
+		
+		return path;
 	}
 	
 	

@@ -82,6 +82,38 @@ public class PuzzleBoard extends JPanel{
 		PuzzleBoardGUI();
 	}
 	
+	public PuzzleBoard(String tileNumbers){
+		this.size = (int) Math.sqrt(tileNumbers.length());
+		this.board = new PuzzleTile[size][size];
+		
+		
+		
+		ArrayList<Integer> tileNumbersList = new ArrayList<Integer>();
+		//int index = 0;
+		for(int i = 0; i<tileNumbers.length(); i++){
+			
+			tileNumbersList.add((int) tileNumbers.charAt(i) - '0');
+			
+		}
+		
+		//System.out.println(tileNumbersList);
+		
+		//If puzzle is not solvable, shuffle list until it is.
+		while(isSolvablePuzzle(tileNumbersList) == false){
+			Collections.shuffle(tileNumbersList);
+			System.out.println(tileNumbersList);
+		}
+		
+		//Creates new tiles with the shuffled tileNumbers list.
+		for(int y = 0; y<size; y++){
+			for(int x = 0; x<size; x++){
+				board[x][y] = new PuzzleTile(tileNumbersList.remove(0),x,y);
+			}
+		}
+		//System.out.println(this.toString());
+		PuzzleBoardGUI();
+	}
+	
 	public PuzzleBoard(PuzzleBoard that){
 		this.size = that.size;
 		this.board = new PuzzleTile[size][size];
@@ -382,10 +414,14 @@ public class PuzzleBoard extends JPanel{
 			//this.board = current.state.board; //So puzzleTiles canMove
 			
 			
-			if(current.state.isCorrectSolution()){
+			if(current.getState().isCorrectSolution()){
 				//DO STUFF
 				System.out.println("DONE \n");
-				System.out.println(current);
+				//System.out.println(current);
+				
+				for(BoardNode x: current.getPath()){
+					System.out.println(x);
+				}
 				
 				return;
 			}
