@@ -2,7 +2,6 @@ package com.ysalama.slidingpuzzle.slidingpuzzle;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class BoardNode implements Comparable<BoardNode>{
 	long state;
@@ -30,7 +29,7 @@ public class BoardNode implements Comparable<BoardNode>{
 		numberOfMoves = previousNode.numberOfMoves + 1;
 	}
 		
-	private int getHeuristic(){
+	public int getHeuristic(){
 		int costFromStartToNode = numberOfMoves;
 		//int costFromNodeToGoal = state.numberOfMisplacedTiles();
 		int costFromNodeToGoal = getState().getManhattenDistance();
@@ -82,6 +81,5 @@ public class BoardNode implements Comparable<BoardNode>{
 		
 		return path;
 	}
-	
 	
 }

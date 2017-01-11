@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
@@ -60,7 +61,7 @@ public class PuzzleBoard extends JPanel{
 		
 	}
 	
-	public PuzzleBoard(int size, ArrayList<Integer> tileNumbersList){
+	/*public PuzzleBoard(int size, ArrayList<Integer> tileNumbersList){
 		this.size = size;
 		this.board = new PuzzleTile[size][size];
 		
@@ -80,7 +81,7 @@ public class PuzzleBoard extends JPanel{
 		}
 		System.out.println(this.toString());
 		PuzzleBoardGUI();
-	}
+	}*/
 	
 	public PuzzleBoard(String tileNumbers){
 		this.size = (int) Math.sqrt(tileNumbers.length());
@@ -139,7 +140,9 @@ public class PuzzleBoard extends JPanel{
 		return result;
 	}
 	
-	public boolean equals(PuzzleBoard that){
+	
+	
+	/*public boolean equals(PuzzleBoard that){
 		for(int y = 0; y<size; y++){
 			for(int x = 0; x<size; x++){
 				if(this.board[x][y].equals(that.board[x][y]) == false){
@@ -149,7 +152,7 @@ public class PuzzleBoard extends JPanel{
 		}
 		return true;
 		
-	}
+	}*/
 	
 	/**
 	 * Returns the tiles on the board in the form of an array list.
@@ -202,6 +205,11 @@ public class PuzzleBoard extends JPanel{
 		}
 		return manhattenDistance;
 	}
+	
+	/**
+	 * Checks if this board is solvable or not.
+	 * 
+	 * */
 	
 	private boolean isSolvablePuzzle(ArrayList<Integer> tileNumbers){
 		
@@ -401,18 +409,15 @@ public class PuzzleBoard extends JPanel{
 	
 	public void solve(){
 		PriorityQueue <BoardNode> queue = new PriorityQueue<BoardNode>();
-		HashSet <BoardNode> visitedSet = new HashSet<BoardNode>();
-		
+		//HashSet <BoardNode> visitedSet = new HashSet<BoardNode>();
+		HashMap <BoardNode,Integer> visitedSet = new HashMap<BoardNode,Integer>();
 		BoardNode startNode = new BoardNode(this);
 		queue.add(startNode);
 		
 		while(queue.isEmpty() == false){
 			BoardNode current = queue.poll();
-			visitedSet.add(current);
+			visitedSet.put(current,current.getHeuristic());
 			//System.out.println(current.getState());
-			
-			//this.board = current.state.board; //So puzzleTiles canMove
-			
 			
 			if(current.getState().isCorrectSolution()){
 				//DO STUFF
@@ -428,16 +433,31 @@ public class PuzzleBoard extends JPanel{
 			
 			ArrayList<BoardNode> nextPossibleNodes = current.getNextPossibleNodes();
 			for(BoardNode x: nextPossibleNodes){
-				if(!visitedSet.contains(x)  && !queue.contains(x)){
+				if(!visitedSet.containsKey(x)){
 					//System.out.println(x.getState());
 					queue.add(x);
-				} 
+				} else if( x.getHeuristic() < visitedSet.get(x)){ 
+					/*If new heuristic is less than that in visitedSet, 
+					 * add this node to queue.*/
+					queue.add(x);
+				}
 			}
 			
 		}
 		
 	}
 	
+	/**
+	 * Returns this puzzleBoard represented as a Long. This is used by the
+	 * BoardNode class to save memory.
+	 * For Example, 
+	 * 	
+	 * 	1	2	3
+	 * 	4	5	6
+	 * 	7	8	0
+	 * 
+	 *  is represented as: 123456780.
+	 * */
 	public long puzzleBoardToLong(){
 		
 		String result = "";

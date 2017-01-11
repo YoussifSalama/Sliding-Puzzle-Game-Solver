@@ -43,24 +43,20 @@ public class PuzzleBoardGame extends JFrame {
 		this.setVisible(true);
 	}
 	
-	public void solve(){
-		board.solve();
-	}
-	
-	
+
 	private void buttonsGUI(){
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		
 
 		JButton button1 = new JButton("Solve!");
-		JButton button2 = new JButton("Button 2");
-		JButton button3 = new JButton("Button 3");
+		//JButton button2 = new JButton("Button 2");
+		//JButton button3 = new JButton("Button 3");
 		
 		button1.addMouseListener(new MouseListener(){
 
 			public void mouseClicked(MouseEvent e) {
-				solve();
+				board.solve();
 				
 			}
 

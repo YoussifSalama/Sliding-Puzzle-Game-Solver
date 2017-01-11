@@ -1,8 +1,5 @@
 package com.ysalama.slidingpuzzle.slidingpuzzle;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class SlidingPuzzleDriver {
 	
 	public static void main(String[] args) {
@@ -33,11 +30,11 @@ public class SlidingPuzzleDriver {
 		System.out.println("solving...");
 		a.solve();*/
 		
-		PuzzleBoard a = new PuzzleBoard("182043765");
-		//PuzzleBoard a = new PuzzleBoard("785146230");
+		//PuzzleBoard a = new PuzzleBoard("182043765");
+		PuzzleBoard a = new PuzzleBoard("785146230");
 		System.out.println("solving...");
-		//a.solve();
-		PuzzleBoardGame x = new PuzzleBoardGame(a);
+		a.solve();
+		//new PuzzleBoardGame(a);
 		
 	}
 	

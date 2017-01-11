@@ -81,9 +81,15 @@ public class PuzzleTile extends JPanel {
 		return tilePosition;
 	}
 	
-	public int getManhattanDistance(int index) {
-		return Math.abs((index / 3) - ((tileNumber-1) / 3)) 
-				+ Math.abs((index % 3) - ((tileNumber-1) % 3));
+	/**
+	 * Returns the Manhattan distance from the current tile location
+	 * to the correct tile location.
+	 * 
+	 * */
+	
+	public int getManhattanDistance(int currentTileIndex) {
+		return Math.abs((currentTileIndex / 3) - ((tileNumber-1) / 3)) 
+				+ Math.abs((currentTileIndex % 3) - ((tileNumber-1) % 3));
 	}
 	
 	//The following method deals with the tiles GUI.
