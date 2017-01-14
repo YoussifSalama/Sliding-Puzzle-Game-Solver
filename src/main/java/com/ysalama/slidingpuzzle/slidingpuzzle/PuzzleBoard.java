@@ -61,28 +61,6 @@ public class PuzzleBoard extends JPanel{
 		
 	}
 	
-	/*public PuzzleBoard(int size, ArrayList<Integer> tileNumbersList){
-		this.size = size;
-		this.board = new PuzzleTile[size][size];
-		
-		System.out.println(tileNumbersList);
-		
-		//If puzzle is not solvable, shuffle list until it is.
-		while(isSolvablePuzzle(tileNumbersList) == false){
-			Collections.shuffle(tileNumbersList);
-			System.out.println(tileNumbersList);
-		}
-		
-		//Creates new tiles with the shuffled tileNumbers list.
-		for(int y = 0; y<size; y++){
-			for(int x = 0; x<size; x++){
-				board[x][y] = new PuzzleTile(tileNumbersList.remove(0),x,y);
-			}
-		}
-		System.out.println(this.toString());
-		PuzzleBoardGUI();
-	}*/
-	
 	public PuzzleBoard(String tileNumbers){
 		this.size = (int) Math.sqrt(tileNumbers.length());
 		this.board = new PuzzleTile[size][size];
@@ -298,23 +276,14 @@ public class PuzzleBoard extends JPanel{
 	/**
 	 * 
 	 * This method checks if a correct solution has been reached.
-	 * There are two possible correct solutions:
-	 * 	1) If the empty tile is in the upper left corner
-	 * 	2) If the empty tile is in the bottom right corner
+	 * i.e.
+	 *  If the empty tile is in the bottom right corner, and all the
+	 *  tiles are in proper order.
 	 * 
 	 * */
+	
 	public boolean isCorrectSolution(){
 
-		/*String firstSolution = ""; // Empty tile in upper left corner.
-		
-		
-		int tileNumber = 0;
-		for(int y = 0; y<size; y++){
-			for(int x = 0; x<size; x++){
-				firstSolution = firstSolution + tileNumber++ + "\t";
-			}
-			firstSolution = firstSolution + "\n";
-		}*/
 		
 		
 		String solution = ""; // Empty tile in bottom right corner.
@@ -330,14 +299,9 @@ public class PuzzleBoard extends JPanel{
 			}
 			solution = solution + "\n";
 		}
-
-		//System.out.println(firstSolution);
-		//System.out.println(solution);
 		
-		//boolean isFirstSolution = this.toString().equals(firstSolution);
 		boolean isSolution = this.toString().equals(solution);
 		return isSolution;
-		//return isFirstSolution||isSecondSolution;
 	}
 	
 	/**
@@ -360,8 +324,73 @@ public class PuzzleBoard extends JPanel{
 		return possibleBoards;
 	}
 	
+	/**
+	 * Solves the puzzle using the A* algorithm
+	 * 
+	 * */
+	
+	public void solve(){
+		PriorityQueue <BoardNode> queue = new PriorityQueue<BoardNode>();
+		HashMap <BoardNode,Integer> visitedSet = new HashMap<BoardNode,Integer>();
+		BoardNode startNode = new BoardNode(this);
+		queue.add(startNode);
+		
+		while(queue.isEmpty() == false){
+			BoardNode current = queue.poll();
+			visitedSet.put(current,current.getHeuristic());
+			
+			if(current.getState().isCorrectSolution()){
+
+				System.out.println("DONE \n");
+				
+				for(BoardNode x: current.getPath()){
+					System.out.println(x);
+				}
+				
+				return;
+			}
+			
+			ArrayList<BoardNode> nextPossibleNodes = current.getNextPossibleNodes();
+			for(BoardNode x: nextPossibleNodes){
+				if(!visitedSet.containsKey(x)){
+					queue.add(x);
+				} else if( x.getHeuristic() < visitedSet.get(x)){ 
+					/*If new heuristic is less than that in visitedSet, 
+					 * add this node to queue.*/
+					queue.add(x);
+				}
+			}
+			
+		}
+		
+	}
+	
+	/**
+	 * Returns this puzzleBoard represented as a Long. This is used by the
+	 * BoardNode class to save memory.
+	 * For Example, 
+	 * 	
+	 * 	1	2	3
+	 * 	4	5	6
+	 * 	7	8	0
+	 * 
+	 *  is represented as: 123456780.
+	 * */
+	public long puzzleBoardToLong(){
+		
+		String result = "";
+		for(int y = 0; y<size; y++){
+			for(int x = 0; x<size; x++){
+				result = result + board[x][y].getTileNumber();
+			}
+		}
+		return new Long(result);
+	}
+	
+	
+	
+	
 	private void PuzzleBoardGUI(){
-		//JFrame this = new JFrame();
 		
 		this.setLayout(new GridLayout(size,size));
 		
@@ -400,73 +429,7 @@ public class PuzzleBoard extends JPanel{
 
 			}
 		}
-
-		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//this.setSize(400,400);
-		//this.setVisible(true);
 		
-	}
-	
-	public void solve(){
-		PriorityQueue <BoardNode> queue = new PriorityQueue<BoardNode>();
-		//HashSet <BoardNode> visitedSet = new HashSet<BoardNode>();
-		HashMap <BoardNode,Integer> visitedSet = new HashMap<BoardNode,Integer>();
-		BoardNode startNode = new BoardNode(this);
-		queue.add(startNode);
-		
-		while(queue.isEmpty() == false){
-			BoardNode current = queue.poll();
-			visitedSet.put(current,current.getHeuristic());
-			//System.out.println(current.getState());
-			
-			if(current.getState().isCorrectSolution()){
-				//DO STUFF
-				System.out.println("DONE \n");
-				//System.out.println(current);
-				
-				for(BoardNode x: current.getPath()){
-					System.out.println(x);
-				}
-				
-				return;
-			}
-			
-			ArrayList<BoardNode> nextPossibleNodes = current.getNextPossibleNodes();
-			for(BoardNode x: nextPossibleNodes){
-				if(!visitedSet.containsKey(x)){
-					//System.out.println(x.getState());
-					queue.add(x);
-				} else if( x.getHeuristic() < visitedSet.get(x)){ 
-					/*If new heuristic is less than that in visitedSet, 
-					 * add this node to queue.*/
-					queue.add(x);
-				}
-			}
-			
-		}
-		
-	}
-	
-	/**
-	 * Returns this puzzleBoard represented as a Long. This is used by the
-	 * BoardNode class to save memory.
-	 * For Example, 
-	 * 	
-	 * 	1	2	3
-	 * 	4	5	6
-	 * 	7	8	0
-	 * 
-	 *  is represented as: 123456780.
-	 * */
-	public long puzzleBoardToLong(){
-		
-		String result = "";
-		for(int y = 0; y<size; y++){
-			for(int x = 0; x<size; x++){
-				result = result + board[x][y].getTileNumber();
-			}
-		}
-		return new Long(result);
 	}
 
 	

@@ -37,13 +37,22 @@ public class BoardNode implements Comparable<BoardNode>{
 		return totalCost;
 	}
 	
-	/*The lower the heuristic value the higher the priority.
+	/**
+	 * The lower the heuristic value the higher the priority.
 	 * And in a priority queue (which will be used to solve the puzzle)
 	 * the elements are ordered according to their natural ordering from least
-	 * to greatest.*/
+	 * to greatest.
+	 * 
+	 * */
 	public int compareTo(BoardNode that) {
 		return this.getHeuristic() - that.getHeuristic();
 	}
+	
+	/**
+	 * Returns an arrayList of board nodes with all the possible next board
+	 * states.
+	 * 
+	 * */
 	
 	public ArrayList<BoardNode> getNextPossibleNodes(){
 		ArrayList<PuzzleBoard> nextPossibleStates = getState().getNextPossibleBoards();
@@ -55,12 +64,22 @@ public class BoardNode implements Comparable<BoardNode>{
 		return nextPossibleNodes;
 	}
 	
+	/**
+	 * Returns a PuzzleBoard.
+	 * It converts the BoardNode state which is a long to a PuzzleBoard.
+	 * 
+	 * */
+	
 	public PuzzleBoard getState(){
 		return new PuzzleBoard(Long.toString(state));
 	}
 	
+	/**
+	 * If two boards have equal states. Then they are equal.
+	 * 
+	 * */
 	public boolean equals(BoardNode that){
-		return this == that;
+		return this.state == that.state;
 	}
 	
 	public String toString(){
@@ -70,6 +89,11 @@ public class BoardNode implements Comparable<BoardNode>{
 		return result;
 	}
 	
+	/**
+	 * Returns a stack of BoardNodes that when printed would print the path 
+	 * leading up to this BoardNode.
+	 * 
+	 * */
 	public ArrayDeque<BoardNode> getPath(){
 		ArrayDeque<BoardNode> path  = new ArrayDeque<BoardNode>();
 		BoardNode current = this;
